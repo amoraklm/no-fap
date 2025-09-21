@@ -1,0 +1,69 @@
+name: Update User Streak
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Extract User ID from Issue Title
+      run: |
+        USER_ID=$(echo "${{ github.event.issue.title }}" | grep -o 'User: [^ ]*' | cut -d' ' -f2)
+        echo "Extracted User ID: $USER_ID"
+        echo "USER_ID=$USER_ID" >> $GITHUB_ENV
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Update data.json
+      run: |
+        # ایجاد فایل data.json اگر وجود ندارد
+        if [ ! -f "data.json" ]; then
+          echo "{}" > data.json
+        fi
+
+        # آپدیت داده با پایتون
+        python3 -c "
+import json
+import datetime
+import os
+
+# خواندن فایل موجود
+try:
+    with open('data.json', 'r', encoding='utf-8') as f:
+        data = json.load(f)
+except:
+    data = {}
+
+# آپدیت داده کاربر
+user_id = os.environ.get('USER_ID', '')
+if user_id and user_id != 'User:' and user_id.startswith('user_'):
+    data[user_id] = {
+        'startDate': datetime.datetime.now().isoformat() + 'Z',
+        'lastUpdated': datetime.datetime.now().isoformat() + 'Z'
+    }
+    
+    # ذخیره فایل
+    with open('data.json', 'w', encoding='utf-8') as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
+    
+    print(f'Data updated for user: {user_id}')
+    print(f'Total users: {len(data)}')
+else:
+    print('No valid User ID found:', user_id)
+"
+
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add data.json
+        git commit -m "📊 Update streak data for user ${{ env.USER_ID }}"
+        git push
