@@ -5,33 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nexus - سفر NoFap شما</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
     <style>
         :root {
-            /* رنگ‌های Tesla - تاریک و مدرن */
-            --tesla-dark: #000000;
-            --tesla-red: #e82127;
-            --tesla-gray: #5c5e62;
+            /* پالت رنگی حرفه‌ای */
+            --primary: #0066ff;
+            --primary-dark: #0052cc;
+            --secondary: #8e44ad;
+            --accent: #ff6b6b;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --dark: #1a1a1a;
+            --darker: #121212;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --gray-light: #ced4da;
             
-            /* رنگ‌های Apple - تمیز و روشن */
-            --apple-white: #f5f5f7;
-            --apple-black: #1d1d1f;
-            --apple-blue: #007aff;
-            --apple-green: #34c759;
-            
-            /* رنگ‌های اضافی بر اساس روانشناسی */
-            --calm-blue: #5ac8fa;
-            --energy-orange: #ff9500;
-            --focus-purple: #af52de;
-            --growth-green: #34c759;
-            
-            /* سایه‌ها و افکت‌ها */
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
-            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
-            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.16);
+            /* سایه‌ها */
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
             
             /* انیمیشن‌ها */
-            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-fast: all 0.2s ease;
+            --transition-normal: all 0.3s ease;
+            --transition-slow: all 0.5s ease;
             --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            
+            /* اندازه‌ها */
+            --border-radius: 12px;
+            --border-radius-lg: 20px;
+            --border-radius-xl: 30px;
         }
 
         /* ریست و پایه */
@@ -44,9 +50,9 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(135deg, var(--tesla-dark) 0%, #1a1a1a 100%);
-            color: var(--apple-white);
+            font-family: Vazirmatn, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            color: var(--light);
             min-height: 100vh;
             line-height: 1.6;
         }
@@ -55,14 +61,31 @@
             max-width: 480px;
             margin: 0 auto;
             min-height: 100vh;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(20px);
             position: relative;
             overflow: hidden;
+            box-shadow: var(--shadow-xl);
         }
 
-        /* نویگیشن اصلی */
-        .main-nav {
+        /* صفحه‌بندی */
+        .page {
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: var(--transition-normal);
+            padding: 1rem;
+            padding-bottom: 80px;
+        }
+
+        .page.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* هدر */
+        .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -72,13 +95,13 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .logo {
             font-size: 1.8rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--tesla-red) 0%, var(--energy-orange) 100%);
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             display: flex;
@@ -86,40 +109,83 @@
             gap: 0.5rem;
         }
 
-        .nav-icons {
+        /* نویگیشن پایین */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
             display: flex;
-            gap: 1.2rem;
+            justify-content: space-around;
+            padding: 0.8rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition-normal);
+            cursor: pointer;
+            min-width: 70px;
+        }
+
+        .nav-item.active {
+            background: rgba(var(--primary-rgb), 0.2);
         }
 
         .nav-icon {
             font-size: 1.4rem;
-            color: var(--apple-white);
+            margin-bottom: 0.3rem;
+            color: var(--light);
             opacity: 0.7;
-            transition: var(--transition-smooth);
+            transition: var(--transition-normal);
         }
 
-        .nav-icon:hover {
+        .nav-item.active .nav-icon {
             opacity: 1;
-            transform: scale(1.1);
+            color: var(--primary);
         }
 
-        /* محتوای اصلی */
-        .main-content {
+        .nav-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: var(--light);
+            opacity: 0.7;
+        }
+
+        .nav-item.active .nav-label {
+            opacity: 1;
+            color: var(--primary);
+        }
+
+        /* کارت‌ها */
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius-lg);
             padding: 1.5rem;
-            padding-bottom: 6rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: var(--transition-normal);
         }
 
-        /* کارت استرک */
-        .streak-card {
-            background: linear-gradient(135deg, rgba(30, 30, 30, 0.95) 0%, rgba(20, 20, 20, 0.98) 100%);
-            border-radius: 20px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+        .card:hover {
+            transform: translateY(-5px);
             box-shadow: var(--shadow-lg);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* صفحه اصلی */
+        .streak-card {
+            text-align: center;
             position: relative;
             overflow: hidden;
+            background: linear-gradient(135deg, rgba(30, 30, 30, 0.95) 0%, rgba(20, 20, 20, 0.98) 100%);
         }
 
         .streak-card::before {
@@ -129,44 +195,45 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, var(--tesla-red), var(--energy-orange), var(--apple-green));
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--success));
         }
 
         .streak-label {
             font-size: 1rem;
-            color: var(--apple-white);
-            opacity: 0.7;
+            color: var(--light);
+            opacity: 0.8;
             margin-bottom: 0.5rem;
         }
 
         .streak-number {
             font-size: 4.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--apple-white) 0%, var(--calm-blue) 100%);
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             line-height: 1;
             margin: 0.5rem 0;
-            text-shadow: 0 0 20px rgba(90, 200, 250, 0.3);
+            text-shadow: 0 0 30px rgba(0, 102, 255, 0.4);
         }
 
         .streak-days {
             font-size: 1.1rem;
-            color: var(--apple-white);
+            color: var(--light);
             opacity: 0.9;
+            font-weight: 500;
         }
 
-        /* دکمه‌های عمل */
-        .action-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin: 2rem 0;
+        .motivation-text {
+            margin-top: 1rem;
+            font-style: italic;
+            color: var(--gray-light);
+            font-size: 0.9rem;
         }
 
+        /* دکمه‌ها */
         .btn {
             padding: 1rem 1.5rem;
-            border-radius: 14px;
+            border-radius: var(--border-radius);
             font-weight: 600;
             font-size: 1rem;
             display: flex;
@@ -176,27 +243,32 @@
             transition: var(--transition-bounce);
             border: none;
             cursor: pointer;
+            width: 100%;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--tesla-red) 0%, var(--energy-orange) 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
-            box-shadow: 0 4px 14px rgba(232, 33, 39, 0.4);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
         }
 
         .btn-secondary {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            color: var(--apple-white);
+            color: var(--light);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(232, 33, 39, 0.5);
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
         }
 
-        /* کارت‌های ویژگی */
+        /* گرید ویژگی‌ها */
         .features-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -206,10 +278,10 @@
 
         .feature-card {
             background: rgba(255, 255, 255, 0.03);
-            border-radius: 18px;
+            border-radius: var(--border-radius);
             padding: 1.5rem;
             text-align: center;
-            transition: var(--transition-smooth);
+            transition: var(--transition-normal);
             border: 1px solid rgba(255, 255, 255, 0.05);
             cursor: pointer;
         }
@@ -223,7 +295,7 @@
         .feature-icon {
             font-size: 2rem;
             margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--calm-blue) 0%, var(--focus-purple) 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -232,66 +304,180 @@
             font-size: 1rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
-            color: var(--apple-white);
+            color: var(--light);
         }
 
         .feature-desc {
             font-size: 0.85rem;
             opacity: 0.7;
-            color: var(--apple-white);
+            color: var(--light);
         }
 
-        /* نویگیشن پایین */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(20px);
-            display: flex;
-            justify-content: space-around;
-            padding: 0.8rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            z-index: 100;
+        /* صفحه پروفایل */
+        .profile-header {
+            text-align: center;
+            padding: 2rem 0;
         }
 
-        .nav-item {
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            margin: 0 auto 1rem;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            padding: 0.5rem 1rem;
-            border-radius: 14px;
-            transition: var(--transition-smooth);
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .profile-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-bio {
+            color: var(--gray-light);
+            margin-bottom: 1.5rem;
+            max-width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--gray-light);
+        }
+
+        /* صفحه چالش‌ها */
+        .challenge-card {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--primary);
+        }
+
+        .challenge-icon {
+            font-size: 1.5rem;
+            margin-left: 1rem;
+            color: var(--primary);
+        }
+
+        .challenge-content {
+            flex: 1;
+        }
+
+        .challenge-title {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .challenge-desc {
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 3px;
+            width: 65%; /* مقدار پیشفرض */
+        }
+
+        /* صفحه جامعه */
+        .community-card {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+        }
+
+        .community-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .community-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-left: 0.8rem;
+        }
+
+        .community-name {
+            font-weight: 600;
+        }
+
+        .community-time {
+            font-size: 0.8rem;
+            opacity: 0.6;
+            margin-right: auto;
+        }
+
+        .community-content {
+            margin-bottom: 0.8rem;
+        }
+
+        .community-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .community-action {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            transition: var(--transition-fast);
             cursor: pointer;
         }
 
-        .nav-item.active {
-            background: rgba(232, 33, 39, 0.2);
-        }
-
-        .nav-icon {
-            font-size: 1.4rem;
-            margin-bottom: 0.3rem;
-            color: var(--apple-white);
-            opacity: 0.7;
-            transition: var(--transition-smooth);
-        }
-
-        .nav-item.active .nav-icon {
+        .community-action:hover {
             opacity: 1;
-            color: var(--tesla-red);
-        }
-
-        .nav-label {
-            font-size: 0.7rem;
-            color: var(--apple-white);
-            opacity: 0.7;
-        }
-
-        .nav-item.active .nav-label {
-            opacity: 1;
-            color: var(--tesla-red);
+            color: var(--primary);
         }
 
         /* انیمیشن‌ها */
@@ -308,9 +494,9 @@
         }
 
         @keyframes glow {
-            0% { box-shadow: 0 0 10px rgba(232, 33, 39, 0.4); }
-            50% { box-shadow: 0 0 20px rgba(232, 33, 39, 0.8); }
-            100% { box-shadow: 0 0 10px rgba(232, 33, 39, 0.4); }
+            0% { box-shadow: 0 0 10px rgba(0, 102, 255, 0.4); }
+            50% { box-shadow: 0 0 20px rgba(0, 102, 255, 0.8); }
+            100% { box-shadow: 0 0 10px rgba(0, 102, 255, 0.4); }
         }
 
         .pulse {
@@ -325,41 +511,33 @@
             animation: glow 2s infinite ease-in-out;
         }
 
-        /* صفحه‌های مختلف */
-        .page {
-            display: none;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: var(--transition-smooth);
+        /* صفحه تحلیل‌ها */
+        .chart-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            height: 200px;
+            position: relative;
+            overflow: hidden;
         }
 
-        .page.active {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* صفحه پروفایل */
-        .profile-header {
-            text-align: center;
-            padding: 2rem 0;
-        }
-
-        .profile-avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--tesla-red) 0%, var(--energy-orange) 100%);
-            margin: 0 auto 1rem;
+        .chart-placeholder {
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.5rem;
-            color: white;
-            border: 3px solid rgba(255, 255, 255, 0.1);
+            height: 100%;
+            color: var(--gray-light);
+            flex-direction: column;
         }
 
-        /* رسپانسیو */
+        .chart-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* تنظیمات رسپانسیو */
         @media (max-width: 400px) {
             .streak-number {
                 font-size: 3.5rem;
@@ -369,71 +547,95 @@
                 grid-template-columns: 1fr;
             }
             
-            .action-buttons {
-                grid-template-columns: 1fr;
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
+            
+            .header {
+                padding: 1rem;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* اسکرول بار سفارشی */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
         }
     </style>
 </head>
 <body>
     <div class="app-container">
-        <!-- نویگیشن اصلی -->
-        <nav class="main-nav">
+        <!-- هدر -->
+        <header class="header">
             <div class="logo">
                 <i class="fas fa-diamond"></i>
                 <span>Nexus</span>
             </div>
-            <div class="nav-icons">
-                <i class="fas fa-bell nav-icon"></i>
-                <i class="fas fa-cog nav-icon"></i>
+            <div class="header-actions">
+                <i class="fas fa-bell"></i>
             </div>
-        </nav>
+        </header>
 
-        <!-- محتوای اصلی -->
-        <div class="main-content">
-            <!-- کارت استرک -->
-            <div class="streak-card float">
+        <!-- صفحه اصلی -->
+        <section id="home-page" class="page active">
+            <div class="streak-card card float">
                 <div class="streak-label">رکورد فعلی شما</div>
-                <div class="streak-number">۱۲</div>
+                <div class="streak-number" id="streak-display">۱۲</div>
                 <div class="streak-days">روز پاک</div>
+                <div class="motivation-text" id="motivation-text">"تو می‌تونی! ادامه بده قهرمان من 💪"</div>
             </div>
 
-            <!-- دکمه‌های عمل -->
             <div class="action-buttons">
-                <button class="btn btn-primary glow">
+                <button class="btn btn-primary glow" onclick="showPage('mood-page')">
                     <i class="fas fa-plus"></i>
                     ثبت حال‌و‌هوا
                 </button>
-                <button class="btn btn-secondary">
+                <button class="btn btn-secondary" onclick="showPage('challenges-page')">
                     <i class="fas fa-trophy"></i>
                     چالش‌ها
                 </button>
             </div>
 
-            <!-- کارت‌های ویژگی -->
             <div class="features-grid">
-                <div class="feature-card">
+                <div class="feature-card" onclick="showPage('analytics-page')">
                     <div class="feature-icon">
                         <i class="fas fa-brain"></i>
                     </div>
                     <h3 class="feature-title">تحلیل پیشرفته</h3>
                     <p class="feature-desc">بررسی الگوهای رفتاری و پیشرفت شما</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card" onclick="showPage('community-page')">
                     <div class="feature-icon">
                         <i class="fas fa-users"></i>
                     </div>
                     <h3 class="feature-title">جامعه حمایتی</h3>
                     <p class="feature-desc">ارتباط با سایر اعضا و دریافت حمایت</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card" onclick="showPage('resources-page')">
                     <div class="feature-icon">
                         <i class="fas fa-book"></i>
                     </div>
                     <h3 class="feature-title">منابع آموزشی</h3>
                     <p class="feature-desc">دسترسی به مطالب آموزشی انحصاری</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card" onclick="showPage('analytics-page')">
                     <div class="feature-icon">
                         <i class="fas fa-chart-line"></i>
                     </div>
@@ -441,23 +643,226 @@
                     <p class="feature-desc">پیگیری پیشرفت با نمودارهای تعاملی</p>
                 </div>
             </div>
-        </div>
+        </section>
+
+        <!-- صفحه پروفایل -->
+        <section id="profile-page" class="page">
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <h2 class="profile-name">امیرحسین</h2>
+                <p class="profile-bio">در حال پیشرفت روزانه و ساختن بهترین نسخه از خودم 💪</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">۱۲</div>
+                    <div class="stat-label">روز فعلی</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">۳۰</div>
+                    <div class="stat-label">بهترین رکورد</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">۸۵%</div>
+                    <div class="stat-label">پیشرفت</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>اهداف من</h3>
+                <p>تکمیل چالش ۹۰ روزه و رسیدن به بهترین نسخه خودم</p>
+            </div>
+
+            <div class="card">
+                <h3>تنظیمات حساب کاربری</h3>
+                <div class="setting-item">
+                    <span>اعلان‌ها</span>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <span>حالت تاریک</span>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <!-- صفحه چالش‌ها -->
+        <section id="challenges-page" class="page">
+            <h2>چالش‌های شما</h2>
+            
+            <div class="challenge-card">
+                <div class="challenge-icon">
+                    <i class="fas fa-fire"></i>
+                </div>
+                <div class="challenge-content">
+                    <h3 class="challenge-title">چالش ۷ روزه</h3>
+                    <p class="challenge-desc">اولین قدم به سوی تغییر</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="challenge-card">
+                <div class="challenge-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="challenge-content">
+                    <h3 class="challenge-title">چالش ۳۰ روزه</h3>
+                    <p class="challenge-desc">ساختن عادت‌های جدید</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 40%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="challenge-card">
+                <div class="challenge-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="challenge-content">
+                    <h3 class="challenge-title">چالش ۹۰ روزه</h3>
+                    <p class="challenge-desc">تغییر کامل سبک زندگی</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 13%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary">
+                <i class="fas fa-plus"></i>
+                شروع چالش جدید
+            </button>
+        </section>
+
+        <!-- صفحه جامعه -->
+        <section id="community-page" class="page">
+            <h2>جامعه نوپکس</h2>
+            
+            <div class="community-card">
+                <div class="community-header">
+                    <div class="community-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="community-name">محمد</div>
+                    <div class="community-time">۲ ساعت پیش</div>
+                </div>
+                <div class="community-content">
+                    امروز روز ۴۵ام من بود و حس فوق‌العاده‌ای دارم. انرژی من بسیار بالاست و تمرکزم چند برابر شده!
+                </div>
+                <div class="community-actions">
+                    <div class="community-action">
+                        <i class="fas fa-heart"></i>
+                        <span>۲۴</span>
+                    </div>
+                    <div class="community-action">
+                        <i class="fas fa-comment"></i>
+                        <span>۵</span>
+                    </div>
+                    <div class="community-action">
+                        <i class="fas fa-share"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="community-card">
+                <div class="community-header">
+                    <div class="community-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="community-name">سارا</div>
+                    <div class="community-time">۵ ساعت پیش</div>
+                </div>
+                <div class="community-content">
+                    بعد از ۳۰ روز، می‌تونم بگم که این بهترین تصمیم زندگی‌م بوده. اعتماد به نفس من به شدت افزایش پیدا کرده!
+                </div>
+                <div class="community-actions">
+                    <div class="community-action">
+                        <i class="fas fa-heart"></i>
+                        <span>۳۲</span>
+                    </div>
+                    <div class="community-action">
+                        <i class="fas fa-comment"></i>
+                        <span>۷</span>
+                    </div>
+                    <div class="community-action">
+                        <i class="fas fa-share"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary">
+                <i class="fas fa-edit"></i>
+                ایجاد پست جدید
+            </button>
+        </section>
+
+        <!-- صفحه تحلیل‌ها -->
+        <section id="analytics-page" class="page">
+            <h2>تحلیل و آمار</h2>
+            
+            <div class="chart-container card">
+                <div class="chart-placeholder">
+                    <i class="fas fa-chart-line chart-icon"></i>
+                    <p>نمودار پیشرفت شما در اینجا نمایش داده می‌شود</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>آمار کلی</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">۱۲</div>
+                        <div class="stat-label">روز فعلی</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">۷۲%</div>
+                        <div class="stat-label">موفقیت</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">۴</div>
+                        <div class="stat-label">چالش‌ها</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>تغییرات خلق و خو</h3>
+                <p>بر اساس گزارش‌های روزانه شما</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 75%"></div>
+                </div>
+                <p>۷۵% بهبود در خلق و خو</p>
+            </div>
+        </section>
 
         <!-- نویگیشن پایین -->
         <nav class="bottom-nav">
-            <div class="nav-item active">
+            <div class="nav-item active" onclick="showPage('home-page')">
                 <i class="fas fa-home nav-icon"></i>
                 <span class="nav-label">خانه</span>
             </div>
-            <div class="nav-item">
+            <div class="nav-item" onclick="showPage('analytics-page')">
                 <i class="fas fa-chart-pie nav-icon"></i>
                 <span class="nav-label">تحلیل‌ها</span>
             </div>
-            <div class="nav-item">
+            <div class="nav-item" onclick="showPage('challenges-page')">
                 <i class="fas fa-trophy nav-icon"></i>
                 <span class="nav-label">چالش‌ها</span>
             </div>
-            <div class="nav-item">
+            <div class="nav-item" onclick="showPage('community-page')">
+                <i class="fas fa-users nav-icon"></i>
+                <span class="nav-label">جامعه</span>
+            </div>
+            <div class="nav-item" onclick="showPage('profile-page')">
                 <i class="fas fa-user nav-icon"></i>
                 <span class="nav-label">پروفایل</span>
             </div>
@@ -465,41 +870,61 @@
     </div>
 
     <script>
-        // مدیریت نویگیشن
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', function() {
-                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
-
-        // انیمیشن‌های تعاملی
-        document.querySelectorAll('.feature-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-5px)';
+        // مدیریت پویای صفحه‌ها
+        function showPage(pageId) {
+            // مخفی کردن تمام صفحه‌ها
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
             });
             
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0)';
+            // نمایش صفحه مورد نظر
+            document.getElementById(pageId).classList.add('active');
+            
+            // به روزرسانی نویگیشن
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
             });
-        });
+            
+            // یافتن آیتم نویگیشن مربوطه و فعال کردن آن
+            const navItems = document.querySelectorAll('.nav-item');
+            for (let item of navItems) {
+                if (item.onclick.toString().includes(pageId)) {
+                    item.classList.add('active');
+                    break;
+                }
+            }
+        }
 
-        // شبیه‌سازی داده‌های پویا
+        // مدیریت وضعیت استرک
+        let currentStreak = 12;
+        const motivationTexts = [
+            "تو می‌تونی! ادامه بده قهرمان من 💪",
+            "هر روز قوی‌تر از دیروز میشی 🌟",
+            "به سفرت ادامه بده، قهرمان! ⚔️",
+            "پیشرفتت واقعاً الهام‌بخشه! 🚀",
+            "یادت باشه: یک روز در لحظه! 🌈",
+            "تو توانایی رسیدن به هر هدفی رو داری! 🔥"
+        ];
+
         function updateStreak() {
-            const streakElement = document.querySelector('.streak-number');
-            let currentStreak = parseInt(streakElement.textContent);
+            const streakElement = document.getElementById('streak-display');
+            const motivationElement = document.getElementById('motivation-text');
             
-            // افزایش استرک هر ۵ ثانیه (برای دمو)
+            // افزایش استرک هر ۱۰ ثانیه (برای دمو)
             setInterval(() => {
                 currentStreak++;
                 streakElement.textContent = currentStreak;
+                
+                // تغییر متن انگیزشی هر بار
+                const randomIndex = Math.floor(Math.random() * motivationTexts.length);
+                motivationElement.textContent = `"${motivationTexts[randomIndex]}"`;
                 
                 // افزودن انیمیشن هنگام تغییر
                 streakElement.classList.add('pulse');
                 setTimeout(() => {
                     streakElement.classList.remove('pulse');
                 }, 1000);
-            }, 5000);
+            }, 10000);
         }
 
         // راه‌اندازی اولیه
@@ -509,8 +934,48 @@
             // ایجاد افکت شناور برای کارت استرک
             setInterval(() => {
                 document.querySelector('.streak-card').classList.toggle('float');
-            }, 3000);
+            }, 5000);
+            
+            // مدیریت کلیک روی کارت‌های ویژگی
+            document.querySelectorAll('.feature-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.add('pulse');
+                    setTimeout(() => {
+                        this.classList.remove('pulse');
+                    }, 500);
+                });
+            });
         });
+
+        // شبیه‌سازی لاگین کاربر
+        const userData = {
+            name: "امیرحسین",
+            streak: 12,
+            bestStreak: 30,
+            joinDate: "1402/05/15",
+            challenges: [
+                { name: "چالش ۷ روزه", progress: 100 },
+                { name: "چالش ۳۰ روزه", progress: 40 },
+                { name: "چالش ۹۰ روزه", progress: 13 }
+            ]
+        };
+
+        // بارگذاری داده‌های کاربر از localStorage (در صورت وجود)
+        function loadUserData() {
+            const savedData = localStorage.getItem('nexusUserData');
+            if (savedData) {
+                return JSON.parse(savedData);
+            }
+            return userData;
+        }
+
+        // ذخیره داده‌های کاربر در localStorage
+        function saveUserData() {
+            localStorage.setItem('nexusUserData', JSON.stringify(userData));
+        }
+
+        // مقداردهی اولیه داده‌های کاربر
+        const user = loadUserData();
     </script>
 </body>
 </html>
