@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ردیاب NoFap</title>
+    <style>
+        @font-face {
+            font-family: 'Vazirmatn';
+            src: url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn-Regular.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        body {
+            font-family: Vazirmatn, Tahoma, sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 500px;
+            width: 90%;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .streak {
+            font-size: 5rem;
+            font-weight: bold;
+            color: #27ae60;
+            margin: 1.5rem 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .days-label {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            margin-bottom: 2rem;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border: none;
+            padding: 1.2rem 2.5rem;
+            font-size: 1.3rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+            font-family: inherit;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        #status {
+            margin-top: 1.5rem;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .info-box {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            border-right: 4px solid #3498db;
+        }
+        
+        .loading {
+            color: #3498db;
+            font-style: italic;
+        }
+        
+        .error {
+            color: #e74c3c;
+        }
+        
+        .success {
+            color: #27ae60;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+            
+            .streak {
+                font-size: 4rem;
+            }
+            
+            button {
+                padding: 1rem 2rem;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 رکورد NoFap شما</h1>
+        
+        <div class="streak" id="streak">0</div>
+        <div class="days-label">روز پاک</div>
+        
+        <div class="info-box">
+            <strong>شناسه کاربری شما:</strong>
+            <div id="userId" style="font-family: monospace; margin-top: 0.5rem; color: #2c3e50;"></div>
+        </div>
+        
+        <button onclick="resetStreak()">🔄 شروع مجدد</button>
+        
+        <div id="status">در حال بارگذاری اطلاعات...</div>
+    </div>
+
+    <script>
+        // تنظیمات
+        const GITHUB_USERNAME = 'amoraklm';
+        const REPO_NAME = 'no-fap';
+        const DATA_FILE_URL = `https://${GITHUB_USERNAME}.github.io/${REPO_NAME}/data.json`;
+        
+        // ایجاد شناسه کاربری منحصر به فرد
+        function getUserId() {
+            let userId = localStorage.getItem('nofap_user_id');
+            if (!userId) {
+                userId = 'user_' + Math.random().toString(36).substr(2, 12);
+                localStorage.setItem('nofap_user_id', userId);
+            }
+            return userId;
+        }
+        
+        // نمایش شناسه کاربری
+        function displayUserId() {
+            const userId = getUserId();
+            document.getElementById('userId').textContent = userId;
+        }
+        
+        // محاسبه تعداد روزها
+        function calculateDays(startDate) {
+            const start = new Date(startDate);
+            const today = new Date();
+            const timeDiff = today.getTime() - start.getTime();
+            return Math.floor(timeDiff / (1000 * 3600 * 24));
+        }
+        
+        // بارگذاری داده‌ها
+        async function loadData() {
+            try {
+                document.getElementById('status').textContent = 'در حال بارگذاری اطلاعات...';
+                document.getElementById('status').className = 'loading';
+                
+                const response = await fetch(`${DATA_FILE_URL}?t=${new Date().getTime()}`);
+                
+                if (!response.ok) {
+                    throw new Error('فایل داده یافت نشد');
+                }
+                
+                const data = await response.json();
+                const userId = getUserId();
+                const userData = data[userId];
+                
+                const streakElement = document.getElementById('streak');
+                const statusElement = document.getElementById('status');
+                
+                if (userData && userData.startDate) {
+                    const days = calculateDays(userData.startDate);
+                    streakElement.textContent = days;
+                    
+                    const persianDate = new Date(userData.startDate).toLocaleDateString('fa-IR');
+                    statusElement.innerHTML = `✅ <strong>شما از تاریخ ${persianDate} شروع کردید</strong><br>
+                                              💪 ادامه بده! تو می‌تونی!`;
+                    statusElement.className = 'success';
+                } else {
+                    streakElement.textContent = '0';
+                    statusElement.innerHTML = '🎯 برای شروع سفر NoFap، دکمه "شروع مجدد" را بزنید';
+                    statusElement.className = '';
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('streak').textContent = '0';
+                document.getElementById('status').innerHTML = '⚠️ خطا در بارگذاری داده. مطمئن شوید اینترنت متصل است';
+                document.getElementById('status').className = 'error';
+            }
+        }
+        
+        // ریست کردن رکورد
+        function resetStreak() {
+            const userId = getUserId();
+            const issueTitle = `Reset Streak - User: ${userId}`;
+            const issueBody = `لطفاً رکورد کاربر زیر را ریست کنید:\n\nUser ID: ${userId}\n\nتاریخ: ${new Date().toLocaleDateString('fa-IR')}`;
+            
+            const githubUrl = `https://github.com/${GITHUB_USERNAME}/${REPO_NAME}/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}`;
+            
+            document.getElementById('status').innerHTML = '📝 در حال باز کردن صفحه GitHub...<br>لطفاً Issue را ایجاد کنید';
+            document.getElementById('status').className = 'loading';
+            
+            setTimeout(() => {
+                window.open(githubUrl, '_blank');
+                
+                // چک کردن دوره‌ای برای آپدیت داده
+                let checks = 0;
+                const checkInterval = setInterval(() => {
+                    loadData();
+                    checks++;
+                    if (checks > 10) { // بعد از 10 چک متوقف شود
+                        clearInterval(checkInterval);
+                    }
+                }, 5000); // هر 5 ثانیه چک کند
+                
+            }, 1000);
+        }
+        
+        // مقداردهی اولیه
+        function init() {
+            displayUserId();
+            loadData();
+            
+            // رفرش خودکار هر 5 دقیقه
+            setInterval(loadData, 5 * 60 * 1000);
+        }
+        
+        // اجرا هنگام بارگذاری صفحه
+        document.addEventListener('DOMContentLoaded', init);
+        
+        // همچنین یک دکمه برای رفرش دستی اضافه می‌کنیم
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'r' || e.key === 'R') {
+                loadData();
+            }
+        });
+    </script>
+</body>
+</html>
