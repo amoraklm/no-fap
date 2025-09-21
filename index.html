@@ -3,196 +3,408 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ردیاب NoFap - Amoraklm</title>
+    <title>Nofap Warrior - سفر قهرمانی شما</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@animxyz/core">
     <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --dark: #1f2937;
+            --light: #f8fafc;
+            --gradient: linear-gradient(135deg, #6366f1 0%, #10b981 100%);
+        }
+
         @font-face {
             font-family: 'Vazirmatn';
-            src: url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn-Regular.woff2') format('woff2');
-            font-weight: normal;
+            src: url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn-Medium.woff2') format('woff2');
+            font-weight: 500;
             font-style: normal;
         }
-        
-        body {
-            font-family: Vazirmatn, Tahoma, sans-serif;
-            text-align: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 1rem;
+
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+
+        body {
+            background: var(--light);
+            color: var(--dark);
             min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .app {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 50px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        /* Navigation */
+        .nav {
+            background: var(--gradient);
+            padding: 1rem;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-content {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
         }
-        
-        .container {
-            max-width: 500px;
-            width: 90%;
-            background: rgba(255, 255, 255, 0.95);
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        /* Main Dashboard */
+        .dashboard {
+            padding: 1.5rem;
+        }
+
+        .streak-card {
+            background: var(--gradient);
+            color: white;
             padding: 2rem;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
         }
-        
-        .streak {
+
+        .streak-number {
             font-size: 4rem;
             font-weight: bold;
-            color: #27ae60;
+            line-height: 1;
             margin: 1rem 0;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
-        
-        .days-label {
-            font-size: 1.1rem;
-            color: #7f8c8d;
-            margin-bottom: 1.5rem;
-        }
-        
-        button {
-            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
-            font-size: 1.1rem;
-            border-radius: 50px;
-            cursor: pointer;
-            margin: 1rem 0;
-            transition: all 0.3s ease;
-            font-family: inherit;
-        }
-        
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
-        }
-        
-        #status {
-            margin-top: 1.5rem;
-            color: #7f8c8d;
-            font-size: 0.9rem;
-            line-height: 1.6;
-            min-height: 60px;
-        }
-        
-        .info-box {
-            background: #f8f9fa;
-            padding: 0.8rem;
-            border-radius: 10px;
-            margin: 1rem 0;
-            font-size: 0.8rem;
-        }
-        
-        .loading { color: #3498db; }
-        .error { color: #e74c3c; }
-        .success { color: #27ae60; }
 
+        .streak-label {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        /* Progress Rings */
+        .progress-ring {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .ring-bg {
+            fill: none;
+            stroke: rgba(255,255,255,0.2);
+            stroke-width: 8;
+        }
+
+        .ring-progress {
+            fill: none;
+            stroke: white;
+            stroke-width: 8;
+            stroke-linecap: round;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .feature-card {
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            border: 2px solid transparent;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* AI Coach */
+        .ai-coach {
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border-left: 4px solid var(--accent);
+        }
+
+        .coach-message {
+            font-style: italic;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes confetti {
+            0% { transform: translateY(0) rotate(0); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--accent);
+            animation: confetti 3s ease-out forwards;
+        }
+
+        /* Responsive */
         @media (max-width: 480px) {
-            .container {
-                padding: 1.5rem;
-            }
-            .streak {
+            .streak-number {
                 font-size: 3rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Dark Mode Support */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: var(--dark);
+            }
+            
+            .app {
+                background: #374151;
+                color: var(--light);
+            }
+            
+            .feature-card {
+                background: #4b5563;
+            }
+            
+            .ai-coach {
+                background: #4b5563;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🚀 رکورد NoFap شما</h1>
-        
-        <div class="streak" id="streak">0</div>
-        <div class="days-label">روز پاک</div>
-        
-        <div class="info-box">
-            <strong>شناسه کاربری:</strong>
-            <div id="userId" style="font-family: monospace; margin-top: 0.3rem; color: #2c3e50;"></div>
-        </div>
-        
-        <button onclick="resetStreak()">🔄 شروع مجدد</button>
-        <button onclick="loadData()">🔄 بروزرسانی</button>
-        
-        <div id="status">در حال بارگذاری اطلاعات...</div>
+    <div class="app">
+        <!-- Navigation -->
+        <nav class="nav">
+            <div class="nav-content">
+                <div class="logo">⚔️ Nofap Warrior</div>
+                <div class="user">👤</div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="dashboard">
+            <!-- Streak Card -->
+            <div class="streak-card">
+                <div class="streak-label">رکورد فعلی شما</div>
+                <div class="streak-number" id="streak">۰</div>
+                <div class="progress-ring">
+                    <svg viewBox="0 0 100 100">
+                        <circle class="ring-bg" cx="50" cy="50" r="40"></circle>
+                        <circle class="ring-progress" cx="50" cy="50" r="40" 
+                                stroke-dasharray="251.2" 
+                                stroke-dashoffset="251.2"
+                                id="progress-ring"></circle>
+                    </svg>
+                </div>
+                <div class="streak-label">روز پاک</div>
+            </div>
+
+            <!-- Features Grid -->
+            <div class="features-grid">
+                <div class="feature-card" onclick="showFeature('mood')">
+                    <div class="feature-icon">😊</div>
+                    <div>ثبت حال و هوا</div>
+                </div>
+                <div class="feature-card" onclick="showFeature('challenges')">
+                    <div class="feature-icon">🏆</div>
+                    <div>چالش‌ها</div>
+                </div>
+                <div class="feature-card" onclick="showFeature('community')">
+                    <div class="feature-icon">👥</div>
+                    <div>جامعه</div>
+                </div>
+                <div class="feature-card" onclick="showFeature('analytics')">
+                    <div class="feature-icon">📊</div>
+                    <div>تحلیل‌ها</div>
+                </div>
+            </div>
+
+            <!-- AI Coach Section -->
+            <div class="ai-coach">
+                <div class="coach-message" id="coach-message">
+                    "سلام قهرمان! امروز روز فوقالعاده‌ای برای پیشرفته. به من بگو حالتو چطوره..."
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="text-align: center; margin: 2rem 0;">
+                <button style="background: var(--secondary); color: white; border: none; padding: 1rem 2rem; border-radius: 25px; font-size: 1.1rem; cursor: pointer;"
+                        onclick="resetStreak()">
+                    🔄 شروع فصل جدید
+                </button>
+            </div>
+        </main>
     </div>
 
     <script>
-        const GITHUB_USERNAME = 'amoraklm';
-        const REPO_NAME = 'no-fap';
-        const DATA_FILE_URL = `https://${GITHUB_USERNAME}.github.io/${REPO_NAME}/data.json`;
-        
+        // Configuration
+        const CONFIG = {
+            username: 'amoraklm',
+            repo: 'no-fap',
+            aiMessages: [
+                "امروز روز فوقالعاده‌ای برای پیشرفته! 💪",
+                "هر روز قوی‌تر از دیروز میشی... 🌟",
+                "به سفرت ادامه بده، قهرمان! ⚔️",
+                "پیشرفتت واقعاً الهام‌بخشه! 🚀",
+                "یادت باشه: یک روز در لحظه! 🌈"
+            ]
+        };
+
+        // Initialize
+        function init() {
+            loadStreakData();
+            setupAnimations();
+            startCoachMessages();
+        }
+
+        // Load streak data
+        async function loadStreakData() {
+            try {
+                const response = await fetch(`https://${CONFIG.username}.github.io/${CONFIG.repo}/data.json`);
+                const data = await response.json();
+                const userId = getUserId();
+                
+                if (data[userId]) {
+                    const days = calculateDays(data[userId].startDate);
+                    updateStreakDisplay(days);
+                    updateProgressRing(days);
+                }
+            } catch (error) {
+                console.log('Loading default data...');
+            }
+        }
+
+        // Calculate days streak
+        function calculateDays(startDate) {
+            return Math.floor((new Date() - new Date(startDate)) / (1000 * 60 * 60 * 24));
+        }
+
+        // Update display
+        function updateStreakDisplay(days) {
+            document.getElementById('streak').textContent = days.toLocaleString('fa-IR');
+        }
+
+        // Update progress ring
+        function updateProgressRing(days) {
+            const ring = document.getElementById('progress-ring');
+            const circumference = 251.2;
+            const offset = circumference - (days % 100) * (circumference / 100);
+            ring.style.strokeDashoffset = offset;
+        }
+
+        // Show feature modal
+        function showFeature(feature) {
+            const messages = {
+                mood: "💡 هر روز حال‌و‌هوات رو ثبت کن تا الگوها رو ببینی",
+                challenges: "🏆 تو چالش‌های ۷، ۳۰، ۹۰ روزه شرکت کن",
+                community: "👥 با جنگجویان دیگر ارتباط بگیر و انگیزه بگیر",
+                analytics: "📊 پیشرفتت رو با نمودارهای تعاملی دنبال کن"
+            };
+            
+            alert(messages[feature]);
+        }
+
+        // AI Coach messages
+        function startCoachMessages() {
+            setInterval(() => {
+                const randomMessage = CONFIG.aiMessages[
+                    Math.floor(Math.random() * CONFIG.aiMessages.length)
+                ];
+                document.getElementById('coach-message').textContent = randomMessage;
+            }, 15000);
+        }
+
+        // Setup animations
+        function setupAnimations() {
+            // Add confetti on load
+            createConfetti();
+        }
+
+        // Create confetti effect
+        function createConfetti() {
+            for (let i = 0; i < 30; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.background = [
+                    '#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'
+                ][i % 5];
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                document.querySelector('.streak-card').appendChild(confetti);
+            }
+        }
+
+        // Get user ID
         function getUserId() {
-            let userId = localStorage.getItem('nofap_user_id');
+            let userId = localStorage.getItem('warrior_id');
             if (!userId) {
-                userId = 'user_' + Math.random().toString(36).substr(2, 12);
-                localStorage.setItem('nofap_user_id', userId);
+                userId = 'warrior_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('warrior_id', userId);
             }
             return userId;
         }
-        
-        function displayUserId() {
-            document.getElementById('userId').textContent = getUserId();
-        }
-        
-        function calculateDays(startDate) {
-            const start = new Date(startDate);
-            const today = new Date();
-            const timeDiff = today.getTime() - start.getTime();
-            return Math.floor(timeDiff / (1000 * 3600 * 24));
-        }
-        
-        async function loadData() {
-            try {
-                document.getElementById('status').textContent = 'در حال بارگذاری اطلاعات...';
-                document.getElementById('status').className = 'loading';
-                
-                const response = await fetch(`${DATA_FILE_URL}?t=${new Date().getTime()}`);
-                
-                if (!response.ok) throw new Error('خطا در دریافت داده');
-                
-                const data = await response.json();
+
+        // Reset streak
+        function resetStreak() {
+            if (confirm('مطمئنی می‌خوای فصل جدیدی رو شروع کنی؟ 🎯')) {
                 const userId = getUserId();
-                const userData = data[userId];
+                const issueUrl = `https://github.com/${CONFIG.username}/${CONFIG.repo}/issues/new?title=NEW_JOURNEY:${userId}&body=شروع سفر جدید برای جنگجو`;
+                window.open(issueUrl, '_blank');
                 
-                if (userData && userData.startDate) {
-                    const days = calculateDays(userData.startDate);
-                    document.getElementById('streak').textContent = days;
-                    
-                    const persianDate = new Date(userData.startDate).toLocaleDateString('fa-IR');
-                    document.getElementById('status').innerHTML = `✅ از تاریخ ${persianDate}<br>💪 ادامه بده!`;
-                    document.getElementById('status').className = 'success';
-                } else {
-                    document.getElementById('streak').textContent = '0';
-                    document.getElementById('status').textContent = 'برای شروع، دکمه "شروع مجدد" را بزنید';
-                    document.getElementById('status').className = '';
-                }
-                
-            } catch (error) {
-                document.getElementById('streak').textContent = '0';
-                document.getElementById('status').textContent = '⚠️ خطا در بارگذاری داده';
-                document.getElementById('status').className = 'error';
+                // Show immediate feedback
+                document.getElementById('streak').textContent = '۰';
+                document.getElementById('progress-ring').style.strokeDashoffset = '251.2';
+                createConfetti();
             }
         }
-        
-        function resetStreak() {
-            const userId = getUserId();
-            const issueTitle = `Reset Streak - User: ${userId}`;
-            const issueBody = `لطفاً رکورد کاربر زیر را ریست کنید:\nUser ID: ${userId}\nتاریخ: ${new Date().toLocaleDateString('fa-IR')}`;
-            
-            const githubUrl = `https://github.com/${GITHUB_USERNAME}/${REPO_NAME}/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}`;
-            
-            document.getElementById('status').textContent = 'در حال باز کردن صفحه GitHub...';
-            document.getElementById('status').className = 'loading';
-            
-            setTimeout(() => {
-                window.open(githubUrl, '_blank');
-                setInterval(loadData, 5000);
-            }, 1000);
-        }
-        
-        function init() {
-            displayUserId();
-            loadData();
-            setInterval(loadData, 30000);
-        }
-        
+
+        // Initialize app
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
