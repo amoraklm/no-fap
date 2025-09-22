@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus - سفر NoFap شما</title>
+    <title>ترک خود ارضایی | رهایی</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            /* پالت رنگی حرفه‌ای */
             --primary: #0066ff;
             --primary-dark: #0052cc;
             --secondary: #8e44ad;
-            --accent: #ff6b6b;
             --success: #27ae60;
             --warning: #f39c12;
             --danger: #e74c3c;
@@ -22,25 +21,19 @@
             --gray: #6c757d;
             --gray-light: #ced4da;
             
-            /* سایه‌ها */
             --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
             --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
             --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
             --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
             
-            /* انیمیشن‌ها */
             --transition-fast: all 0.2s ease;
             --transition-normal: all 0.3s ease;
             --transition-slow: all 0.5s ease;
-            --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
             
-            /* اندازه‌ها */
             --border-radius: 12px;
             --border-radius-lg: 20px;
-            --border-radius-xl: 30px;
         }
 
-        /* ریست و پایه */
         * {
             margin: 0;
             padding: 0;
@@ -50,7 +43,7 @@
         }
 
         body {
-            font-family: Vazirmatn, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: Vazirmatn, sans-serif;
             background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
             color: var(--light);
             min-height: 100vh;
@@ -68,7 +61,6 @@
             box-shadow: var(--shadow-xl);
         }
 
-        /* صفحه‌بندی */
         .page {
             display: none;
             opacity: 0;
@@ -86,7 +78,6 @@
             transform: translateY(0);
         }
 
-        /* هدر */
         .header {
             display: flex;
             justify-content: space-between;
@@ -101,17 +92,13 @@
         }
 
         .logo {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 800;
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
         }
 
-        /* نویگیشن پایین */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -130,19 +117,19 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 0.5rem 1rem;
+            padding: 0.5rem;
             border-radius: var(--border-radius);
             transition: var(--transition-normal);
             cursor: pointer;
-            min-width: 70px;
+            min-width: 60px;
         }
 
         .nav-item.active {
-            background: rgba(var(--primary-rgb), 0.2);
+            background: rgba(0, 102, 255, 0.2);
         }
 
         .nav-icon {
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             margin-bottom: 0.3rem;
             color: var(--light);
             opacity: 0.7;
@@ -166,23 +153,14 @@
             color: var(--primary);
         }
 
-        /* کارت‌ها */
         .card {
             background: rgba(255, 255, 255, 0.05);
             border-radius: var(--border-radius-lg);
             padding: 1.5rem;
             margin-bottom: 1.5rem;
             border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: var(--transition-normal);
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-lg);
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        /* صفحه اصلی */
         .streak-card {
             text-align: center;
             position: relative;
@@ -215,7 +193,6 @@
             -webkit-text-fill-color: transparent;
             line-height: 1;
             margin: 0.5rem 0;
-            text-shadow: 0 0 30px rgba(0, 102, 255, 0.4);
         }
 
         .timer {
@@ -240,7 +217,6 @@
             min-height: 40px;
         }
 
-        /* دکمه‌ها */
         .btn {
             padding: 1rem 1.5rem;
             border-radius: var(--border-radius);
@@ -250,7 +226,7 @@
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
-            transition: var(--transition-bounce);
+            transition: var(--transition-normal);
             border: none;
             cursor: pointer;
             width: 100%;
@@ -259,58 +235,13 @@
         .btn-primary {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
-            box-shadow: var(--shadow-md);
         }
 
         .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
 
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            color: var(--light);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        /* نظرسنجی */
-        .survey-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 0.5rem;
-            margin: 1rem 0;
-        }
-
-        .survey-option {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: var(--border-radius);
-            padding: 0.5rem;
-            text-align: center;
-            cursor: pointer;
-            transition: var(--transition-normal);
-            border: 1px solid transparent;
-        }
-
-        .survey-option:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .survey-option.selected {
-            background: rgba(var(--primary-rgb), 0.2);
-            border-color: var(--primary);
-        }
-
-        .survey-emoji {
-            font-size: 1.5rem;
-            margin-bottom: 0.3rem;
-        }
-
-        /* صفحه پروفایل */
         .profile-header {
             text-align: center;
             padding: 2rem 0;
@@ -328,7 +259,6 @@
             font-size: 2.5rem;
             color: white;
             border: 3px solid rgba(255, 255, 255, 0.1);
-            box-shadow: var(--shadow-lg);
             position: relative;
             overflow: hidden;
             cursor: pointer;
@@ -380,21 +310,10 @@
             margin-top: 0.5rem;
         }
 
-        .league-slave {
-            background: linear-gradient(135deg, var(--gray) 0%, #495057 100%);
-        }
-
-        .league-soldier {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-        }
-
-        .league-commander {
-            background: linear-gradient(135deg, var(--secondary) 0%, #7d3c98 100%);
-        }
-
-        .league-king {
-            background: linear-gradient(135deg, var(--warning) 0%, #e67e22 100%);
-        }
+        .league-slave { background: linear-gradient(135deg, var(--gray) 0%, #495057 100%); }
+        .league-soldier { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); }
+        .league-commander { background: linear-gradient(135deg, var(--secondary) 0%, #7d3c98 100%); }
+        .league-king { background: linear-gradient(135deg, var(--warning) 0%, #e67e22 100%); }
 
         .stats-grid {
             display: grid;
@@ -420,10 +339,6 @@
         .stat-label {
             font-size: 0.8rem;
             color: var(--gray-light);
-        }
-
-        .profile-form {
-            margin-top: 1.5rem;
         }
 
         .form-group {
@@ -458,7 +373,6 @@
             margin-top: 0.3rem;
         }
 
-        /* صفحه چالش‌ها */
         .challenge-card {
             display: flex;
             align-items: center;
@@ -467,16 +381,42 @@
             background: rgba(255, 255, 255, 0.05);
             border-radius: var(--border-radius);
             border-left: 4px solid var(--primary);
+            position: relative;
+        }
+
+        .challenge-actions {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .challenge-action {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .challenge-action:hover {
+            background: rgba(255, 255, 255, 0.2);
         }
 
         .challenge-icon {
             font-size: 1.5rem;
-            margin-left: 1rem;
+            margin-left: 2rem;
             color: var(--primary);
         }
 
         .challenge-content {
             flex: 1;
+            margin-right: 1rem;
         }
 
         .challenge-title {
@@ -525,19 +465,36 @@
             box-shadow: var(--shadow-lg);
             cursor: pointer;
             z-index: 90;
-            transition: var(--transition-bounce);
         }
 
-        .add-challenge-btn:hover {
-            transform: scale(1.1);
-        }
-
-        /* صفحه جامعه */
         .community-card {
             margin-bottom: 1rem;
             padding: 1rem;
             background: rgba(255, 255, 255, 0.05);
             border-radius: var(--border-radius);
+            position: relative;
+        }
+
+        .post-actions {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+        }
+
+        .post-action {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .post-action:hover {
+            background: rgba(255, 255, 255, 0.2);
         }
 
         .community-header {
@@ -557,12 +514,12 @@
             color: white;
             margin-left: 0.8rem;
             flex-shrink: 0;
+            overflow: hidden;
         }
 
         .community-avatar img {
             width: 100%;
             height: 100%;
-            border-radius: 50%;
             object-fit: cover;
             display: none;
         }
@@ -625,106 +582,16 @@
             box-shadow: var(--shadow-lg);
             cursor: pointer;
             z-index: 90;
-            transition: var(--transition-bounce);
         }
 
-        .add-post-btn:hover {
-            transform: scale(1.1);
-        }
-
-        /* صفحه تحلیل‌ها */
         .chart-container {
             background: rgba(255, 255, 255, 0.05);
             border-radius: var(--border-radius);
             padding: 1.5rem;
             margin-bottom: 1.5rem;
-            height: 250px;
-            position: relative;
-            overflow: hidden;
+            height: 300px;
         }
 
-        .chart-placeholder {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            color: var(--gray-light);
-            flex-direction: column;
-        }
-
-        .chart-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            opacity: 0.5;
-        }
-
-        .bar-chart {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            height: 180px;
-            padding: 0 1rem;
-        }
-
-        .bar {
-            width: 30px;
-            background: linear-gradient(to top, var(--primary), var(--secondary));
-            border-radius: 4px 4px 0 0;
-            position: relative;
-            transition: height 0.5s ease;
-        }
-
-        .bar-label {
-            position: absolute;
-            bottom: -25px;
-            left: 0;
-            right: 0;
-            text-align: center;
-            font-size: 0.7rem;
-            color: var(--gray-light);
-        }
-
-        .bar-value {
-            position: absolute;
-            top: -20px;
-            left: 0;
-            right: 0;
-            text-align: center;
-            font-size: 0.7rem;
-            font-weight: 600;
-        }
-
-        .mood-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin: 1.5rem 0;
-        }
-
-        .mood-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: var(--border-radius);
-            padding: 1rem;
-            text-align: center;
-        }
-
-        .mood-emoji {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .mood-title {
-            font-weight: 600;
-            margin-bottom: 0.3rem;
-        }
-
-        .mood-value {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        /* مودال‌ها */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -783,31 +650,25 @@
             font-size: 1.5rem;
             cursor: pointer;
             opacity: 0.7;
-            transition: var(--transition-fast);
         }
 
         .modal-close:hover {
             opacity: 1;
         }
 
-        .modal-body {
-            margin-bottom: 1.5rem;
-        }
-
         .modal-footer {
             display: flex;
             justify-content: flex-end;
             gap: 1rem;
+            margin-top: 1.5rem;
         }
 
-        /* دکمه‌های مودال */
         .btn-modal {
             padding: 0.8rem 1.5rem;
             border-radius: var(--border-radius);
             font-weight: 600;
             border: none;
             cursor: pointer;
-            transition: var(--transition-normal);
         }
 
         .btn-modal-primary {
@@ -820,7 +681,6 @@
             color: var(--light);
         }
 
-        /* حالت‌های تاریخ */
         .date-options {
             display: flex;
             gap: 1rem;
@@ -839,7 +699,7 @@
         }
 
         .date-option.selected {
-            background: rgba(var(--primary-rgb), 0.2);
+            background: rgba(0, 102, 255, 0.2);
             border-color: var(--primary);
         }
 
@@ -851,7 +711,6 @@
             display: block;
         }
 
-        /* رسپانسیو */
         @media (max-width: 400px) {
             .streak-number {
                 font-size: 3rem;
@@ -860,17 +719,8 @@
             .stats-grid {
                 grid-template-columns: 1fr;
             }
-            
-            .header {
-                padding: 1rem;
-            }
-            
-            .logo {
-                font-size: 1.5rem;
-            }
         }
 
-        /* اسکرول بار سفارشی */
         ::-webkit-scrollbar {
             width: 6px;
         }
@@ -884,92 +734,21 @@
             background: var(--primary);
             border-radius: 10px;
         }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-dark);
-        }
-
-        /* انیمیشن‌ها */
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
-
-        @keyframes glow {
-            0% { box-shadow: 0 0 10px rgba(0, 102, 255, 0.4); }
-            50% { box-shadow: 0 0 20px rgba(0, 102, 255, 0.8); }
-            100% { box-shadow: 0 0 10px rgba(0, 102, 255, 0.4); }
-        }
-
-        .pulse {
-            animation: pulse 2s infinite ease-in-out;
-        }
-
-        .float {
-            animation: float 3s infinite ease-in-out;
-        }
-
-        .glow {
-            animation: glow 2s infinite ease-in-out;
-        }
     </style>
 </head>
 <body>
     <div class="app-container">
-        <!-- هدر -->
         <header class="header">
-            <div class="logo">
-                <i class="fas fa-diamond"></i>
-                <span>Nexus</span>
-            </div>
-            <div class="header-actions">
-                <i class="fas fa-bell"></i>
-            </div>
+            <div class="logo">ترک خود ارضایی | رهایی</div>
         </header>
 
-        <!-- صفحه اصلی -->
         <section id="home-page" class="page active">
-            <div class="streak-card card float">
+            <div class="streak-card card">
                 <div class="streak-label">رکورد فعلی شما</div>
                 <div class="streak-number" id="streak-display">0</div>
                 <div class="timer" id="timer-display">00:00:00</div>
                 <div class="streak-days" id="streak-days">روز پاک</div>
                 <div class="motivation-text" id="motivation-text">"سفر هزار فرسنگ با یک قدم آغاز می‌شود 💪"</div>
-            </div>
-
-            <div class="card">
-                <h3>امروز چطور بود؟</h3>
-                <p>احساس خودت رو نسبت به امروز انتخاب کن</p>
-                
-                <div class="survey-grid">
-                    <div class="survey-option" data-value="1">
-                        <div class="survey-emoji">😢</div>
-                        <div>خیلی بد</div>
-                    </div>
-                    <div class="survey-option" data-value="2">
-                        <div class="survey-emoji">😞</div>
-                        <div>بد</div>
-                    </div>
-                    <div class="survey-option" data-value="3">
-                        <div class="survey-emoji">😐</div>
-                        <div>معمولی</div>
-                    </div>
-                    <div class="survey-option" data-value="4">
-                        <div class="survey-emoji">😊</div>
-                        <div>خوب</div>
-                    </div>
-                    <div class="survey-option" data-value="5">
-                        <div class="survey-emoji">😁</div>
-                        <div>عالی</div>
-                    </div>
-                </div>
             </div>
 
             <button class="btn btn-primary" id="reset-streak-btn">
@@ -978,7 +757,6 @@
             </button>
         </section>
 
-        <!-- صفحه پروفایل -->
         <section id="profile-page" class="page">
             <div class="profile-header">
                 <div class="profile-avatar" id="profile-avatar">
@@ -991,17 +769,6 @@
                 <h2 class="profile-name" id="profile-name">کاربر</h2>
                 <p class="profile-bio" id="profile-bio">بیوگرافی شما اینجا نمایش داده می‌شود</p>
                 <div class="league-badge" id="league-badge">برده</div>
-            </div>
-
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-value" id="current-streak">0</div>
-                    <div class="stat-label">روز فعلی</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="best-streak">0</div>
-                    <div class="stat-label">بهترین رکورد</div>
-                </div>
             </div>
 
             <div class="card">
@@ -1025,39 +792,27 @@
             </div>
         </section>
 
-        <!-- صفحه چالش‌ها -->
         <section id="challenges-page" class="page">
             <h2>چالش‌های شما</h2>
-            <div id="challenges-list">
-                <!-- چالش‌ها به صورت داینامیک اضافه خواهند شد -->
-            </div>
-            
+            <div id="challenges-list"></div>
             <div class="add-challenge-btn" id="add-challenge-btn">
                 <i class="fas fa-plus"></i>
             </div>
         </section>
 
-        <!-- صفحه جامعه -->
         <section id="community-page" class="page">
-            <h2>جامعه نوپکس</h2>
-            <div id="community-posts">
-                <!-- پست‌ها به صورت داینامیک اضافه خواهند شد -->
-            </div>
-            
+            <h2>جامعه رهایی</h2>
+            <div id="community-posts"></div>
             <div class="add-post-btn" id="add-post-btn">
                 <i class="fas fa-edit"></i>
             </div>
         </section>
 
-        <!-- صفحه تحلیل‌ها -->
         <section id="analytics-page" class="page">
             <h2>تحلیل و آمار</h2>
             
             <div class="chart-container card">
-                <h3>پیشرفت هفتگی</h3>
-                <div class="bar-chart" id="progress-chart">
-                    <!-- نمودار به صورت داینامیک ایجاد خواهد شد -->
-                </div>
+                <canvas id="progress-chart"></canvas>
             </div>
             
             <div class="card">
@@ -1065,56 +820,24 @@
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-value" id="analytics-current">0</div>
-                        <div class="stat-label">روز فعلی</div>
+                        <div class="stat-label">میانگین پاکی روزانه</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-value" id="analytics-success">0%</div>
-                        <div class="stat-label">میانگین موفقیت</div>
+                        <div class="stat-value" id="analytics-best">0</div>
+                        <div class="stat-label">بیشترین رکورد</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="analytics-worst">0</div>
+                        <div class="stat-label">کمترین رکورد</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-value" id="analytics-challenges">0</div>
                         <div class="stat-label">چالش‌ها</div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="analytics-mood">😐</div>
-                        <div class="stat-label">خلق و خوی امروز</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="card">
-                <h3>تغییرات خلق و خو</h3>
-                <div class="mood-grid">
-                    <div class="mood-card">
-                        <div class="mood-emoji">😢</div>
-                        <div class="mood-title">خیلی بد</div>
-                        <div class="mood-value" id="mood-1">0%</div>
-                    </div>
-                    <div class="mood-card">
-                        <div class="mood-emoji">😞</div>
-                        <div class="mood-title">بد</div>
-                        <div class="mood-value" id="mood-2">0%</div>
-                    </div>
-                    <div class="mood-card">
-                        <div class="mood-emoji">😐</div>
-                        <div class="mood-title">معمولی</div>
-                        <div class="mood-value" id="mood-3">0%</div>
-                    </div>
-                    <div class="mood-card">
-                        <div class="mood-emoji">😊</div>
-                        <div class="mood-title">خوب</div>
-                        <div class="mood-value" id="mood-4">0%</div>
-                    </div>
-                    <div class="mood-card">
-                        <div class="mood-emoji">😁</div>
-                        <div class="mood-title">عالی</div>
-                        <div class="mood-value" id="mood-5">0%</div>
-                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- نویگیشن پایین -->
         <nav class="bottom-nav">
             <div class="nav-item active" onclick="showPage('home-page')">
                 <i class="fas fa-home nav-icon"></i>
@@ -1139,7 +862,7 @@
         </nav>
     </div>
 
-    <!-- مودال افزودن چالش -->
+    <!-- مودال‌ها -->
     <div class="modal-overlay" id="challenge-modal">
         <div class="modal">
             <div class="modal-header">
@@ -1180,7 +903,6 @@
         </div>
     </div>
 
-    <!-- مودال افزودن پست -->
     <div class="modal-overlay" id="post-modal">
         <div class="modal">
             <div class="modal-header">
@@ -1206,7 +928,6 @@
         </div>
     </div>
 
-    <!-- مودال آپلود عکس -->
     <div class="modal-overlay" id="avatar-modal">
         <div class="modal">
             <div class="modal-header">
@@ -1221,11 +942,6 @@
                         <i class="fas fa-upload"></i>
                         انتخاب فایل
                     </button>
-                </div>
-                <div class="form-group">
-                    <p style="color: var(--gray-light); font-size: 0.9rem;">
-                        <i class="fas fa-info-circle"></i> حداکثر حجم فایل: 2MB
-                    </p>
                 </div>
             </div>
             <div class="modal-footer">
@@ -1242,27 +958,14 @@
             bio: "بیوگرافی شما اینجا نمایش داده می‌شود",
             streak: 0,
             bestStreak: 0,
+            worstStreak: 0,
+            streaksHistory: [],
             startTime: null,
-            mood: {},
             challenges: [],
             posts: [],
             lastPostDate: null,
             avatar: null
         };
-
-        // متن‌های انگیزشی
-        const motivationTexts = [
-            "سفر هزار فرسنگ با یک قدم آغاز می‌شود 💪",
-            "تو می‌تونی! ادامه بده قهرمان من 🌟",
-            "هر روز قوی‌تر از دیروز میشی ⚔️",
-            "پیشرفتت واقعاً الهام‌بخشه! 🚀",
-            "یادت باشه: یک روز در لحظه! 🌈",
-            "تو توانایی رسیدن به هر هدفی رو داری! 🔥",
-            "هیچ چیز نمی‌تونه جلوی اراده تو رو بگیره 💎",
-            "امروز روز تو هست، ازش نهایت استفاده رو ببر ☀️",
-            "همین قدم‌های کوچیک تو رو به قله می‌رسونن 🏔️",
-            "تو از اون چیزی که فکر می‌کنی قوی‌تری 💫"
-        ];
 
         // لیگ‌ها
         const leagues = [
@@ -1270,12 +973,6 @@
             { name: "سرباز", min: 7, max: 15, class: "league-soldier" },
             { name: "سردار", min: 15, max: 45, class: "league-commander" },
             { name: "پادشاه", min: 45, max: Infinity, class: "league-king" }
-        ];
-
-        // تاریخ شمسی (برای نمایش تاریخ به صورت فارسی)
-        const persianMonths = [
-            "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور",
-            "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"
         ];
 
         // مقداردهی اولیه
@@ -1289,61 +986,49 @@
             renderAnalytics();
         });
 
-        // بارگذاری داده‌های کاربر از localStorage
+        // بارگذاری داده‌های کاربر
         function loadUserData() {
-            const savedData = localStorage.getItem('nexusUserData');
+            const savedData = localStorage.getItem('nofapUserData');
             if (savedData) {
                 userData = JSON.parse(savedData);
-                
-                // تبدیل رشته تاریخ به شیء Date
-                if (userData.startTime) {
-                    userData.startTime = new Date(userData.startTime);
-                }
-                if (userData.lastPostDate) {
-                    userData.lastPostDate = new Date(userData.lastPostDate);
-                }
+                if (userData.startTime) userData.startTime = new Date(userData.startTime);
+                if (userData.lastPostDate) userData.lastPostDate = new Date(userData.lastPostDate);
             } else {
-                // داده‌های پیش‌فرض
                 userData.startTime = new Date();
                 saveUserData();
             }
         }
 
-        // ذخیره داده‌های کاربر در localStorage
+        // ذخیره داده‌های کاربر
         function saveUserData() {
-            // تبدیل شیء Date به رشته برای ذخیره‌سازی
             const dataToSave = {
                 ...userData,
                 startTime: userData.startTime ? userData.startTime.toISOString() : null,
                 lastPostDate: userData.lastPostDate ? userData.lastPostDate.toISOString() : null
             };
-            
-            localStorage.setItem('nexusUserData', JSON.stringify(dataToSave));
+            localStorage.setItem('nofapUserData', JSON.stringify(dataToSave));
         }
 
         // راه‌اندازی event listeners
         function initEventListeners() {
-            // نظرسنجی
-            document.querySelectorAll('.survey-option').forEach(option => {
+            document.getElementById('reset-streak-btn').addEventListener('click', resetStreak);
+            document.getElementById('save-profile-btn').addEventListener('click', saveProfile);
+            document.getElementById('add-challenge-btn').addEventListener('click', () => openModal('challenge-modal'));
+            document.getElementById('save-challenge-btn').addEventListener('click', saveChallenge);
+            document.getElementById('add-post-btn').addEventListener('click', openPostModal);
+            document.getElementById('save-post-btn').addEventListener('click', savePost);
+            document.getElementById('profile-avatar').addEventListener('click', () => openModal('avatar-modal'));
+            document.getElementById('avatar-upload').addEventListener('change', handleAvatarUpload);
+            document.getElementById('save-avatar-btn').addEventListener('click', saveAvatar);
+
+            document.querySelectorAll('.date-option').forEach(option => {
                 option.addEventListener('click', function() {
-                    document.querySelectorAll('.survey-option').forEach(opt => {
-                        opt.classList.remove('selected');
-                    });
+                    document.querySelectorAll('.date-option').forEach(opt => opt.classList.remove('selected'));
                     this.classList.add('selected');
-                    
-                    const moodValue = parseInt(this.dataset.value);
-                    saveMood(moodValue);
+                    document.getElementById('date-custom-inputs').classList.toggle('active', this.dataset.type === 'custom');
                 });
             });
 
-            // ریست کردن استرک
-            document.getElementById('reset-streak-btn').addEventListener('click', function() {
-                if (confirm('آیا مطمئن هستید که می‌خواهید استرک خود را ریست کنید؟')) {
-                    resetStreak();
-                }
-            });
-
-            // مدیریت کاراکترهای inputs
             document.getElementById('input-name').addEventListener('input', function() {
                 document.getElementById('name-char-count').textContent = this.value.length;
             });
@@ -1355,107 +1040,35 @@
             document.getElementById('post-content').addEventListener('input', function() {
                 document.getElementById('post-char-count').textContent = this.value.length;
             });
-
-            // ذخیره پروفایل
-            document.getElementById('save-profile-btn').addEventListener('click', saveProfile);
-
-            // افزودن چالش
-            document.getElementById('add-challenge-btn').addEventListener('click', function() {
-                openModal('challenge-modal');
-            });
-
-            // انتخاب نوع تاریخ برای چالش
-            document.querySelectorAll('.date-option').forEach(option => {
-                option.addEventListener('click', function() {
-                    document.querySelectorAll('.date-option').forEach(opt => {
-                        opt.classList.remove('selected');
-                    });
-                    this.classList.add('selected');
-                    
-                    if (this.dataset.type === 'custom') {
-                        document.getElementById('date-custom-inputs').classList.add('active');
-                    } else {
-                        document.getElementById('date-custom-inputs').classList.remove('active');
-                    }
-                });
-            });
-
-            // ذخیره چالش
-            document.getElementById('save-challenge-btn').addEventListener('click', saveChallenge);
-
-            // افزودن پست
-            document.getElementById('add-post-btn').addEventListener('click', function() {
-                // بررسی آیا کاربر امروز پست ارسال کرده
-                const today = new Date().toDateString();
-                const lastPostDate = userData.lastPostDate ? userData.lastPostDate.toDateString() : null;
-                
-                if (lastPostDate === today) {
-                    document.getElementById('post-limit-message').style.display = 'block';
-                    document.getElementById('save-post-btn').disabled = true;
-                } else {
-                    document.getElementById('post-limit-message').style.display = 'none';
-                    document.getElementById('save-post-btn').disabled = false;
-                }
-                
-                openModal('post-modal');
-            });
-
-            // ذخیره پست
-            document.getElementById('save-post-btn').addEventListener('click', savePost);
-
-            // تغییر عکس پروفایل
-            document.getElementById('profile-avatar').addEventListener('click', function() {
-                openModal('avatar-modal');
-            });
-
-            document.getElementById('avatar-upload').addEventListener('change', handleAvatarUpload);
-            document.getElementById('save-avatar-btn').addEventListener('click', saveAvatar);
         }
 
-        // به روزرسانی UI بر اساس داده‌های کاربر
+        // به روزرسانی UI
         function updateUI() {
-            // محاسبه روزهای گذشته
             const now = new Date();
             const startTime = userData.startTime || now;
             const timeDiff = now.getTime() - startTime.getTime();
             const daysDiff = Math.floor(timeDiff / (1000 * 3600 * 24));
             
             userData.streak = daysDiff;
-            
-            // به روزرسانی بهترین رکورد
-            if (daysDiff > userData.bestStreak) {
-                userData.bestStreak = daysDiff;
-            }
-            
-            // به روزرسانی صفحه اصلی
+            if (daysDiff > userData.bestStreak) userData.bestStreak = daysDiff;
+            if (userData.worstStreak === 0 || daysDiff < userData.worstStreak) userData.worstStreak = daysDiff;
+
             document.getElementById('streak-display').textContent = daysDiff;
-            document.getElementById('streak-days').textContent = daysDiff === 1 ? 'روز پاک' : 'روز پاک';
-            
-            // به روزرسانی پروفایل
             document.getElementById('profile-name').textContent = userData.name;
             document.getElementById('input-name').value = userData.name;
             document.getElementById('profile-bio').textContent = userData.bio;
             document.getElementById('input-bio').value = userData.bio;
             document.getElementById('name-char-count').textContent = userData.name.length;
             document.getElementById('bio-char-count').textContent = userData.bio.length;
-            
-            document.getElementById('current-streak').textContent = daysDiff;
-            document.getElementById('best-streak').textContent = userData.bestStreak;
-            
-            // به روزرسانی لیگ
+
             updateLeague(daysDiff);
-            
-            // به روزرسانی عکس پروفایل
             updateAvatar();
-            
-            // ذخیره داده‌ها
             saveUserData();
         }
 
-        // به روزرسانی لیگ کاربر
+        // به روزرسانی لیگ
         function updateLeague(days) {
             const leagueBadge = document.getElementById('league-badge');
-            
             for (const league of leagues) {
                 if (days >= league.min && days < league.max) {
                     leagueBadge.textContent = league.name;
@@ -1480,13 +1093,12 @@
             }
         }
 
-        // شروع تایمر
+        // تایمر
         function startTimer() {
             updateTimer();
             setInterval(updateTimer, 1000);
         }
 
-        // به روزرسانی تایمر
         function updateTimer() {
             if (!userData.startTime) return;
             
@@ -1497,47 +1109,18 @@
             const seconds = Math.floor(timeDiff / 1000) % 60;
             const minutes = Math.floor(timeDiff / (1000 * 60)) % 60;
             const hours = Math.floor(timeDiff / (1000 * 60 * 60)) % 24;
-            const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
             
             document.getElementById('timer-display').textContent = 
                 `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-            
-            // تغییر متن انگیزشی هر 10 ثانیه
-            if (seconds % 10 === 0) {
-                const randomIndex = Math.floor(Math.random() * motivationTexts.length);
-                document.getElementById('motivation-text').textContent = `"${motivationTexts[randomIndex]}"`;
-            }
         }
 
         // ریست کردن استرک
         function resetStreak() {
-            userData.startTime = new Date();
-            saveUserData();
-            updateUI();
-            
-            // نمایش پیام موفقیت
-            alert('استرک شما با موفقیت ریست شد! از now شروع کنید.');
-        }
-
-        // ذخیره وضعیت خلقی
-        function saveMood(value) {
-            const today = new Date().toDateString();
-            userData.mood[today] = value;
-            saveUserData();
-            
-            // نمایش پیام موفقیت
-            alert(`وضعیت خلقی شما برای امروز ثبت شد: ${getMoodText(value)}`);
-        }
-
-        // دریافت متن وضعیت خلقی
-        function getMoodText(value) {
-            switch(value) {
-                case 1: return "خیلی بد 😢";
-                case 2: return "بد 😞";
-                case 3: return "معمولی 😐";
-                case 4: return "خوب 😊";
-                case 5: return "عالی 😁";
-                default: return "ثبت نشده";
+            if (confirm('آیا مطمئن هستید که می‌خواهید استرک خود را ریست کنید؟')) {
+                userData.startTime = new Date();
+                saveUserData();
+                updateUI();
+                alert('استرک شما با موفقیت ریست شد!');
             }
         }
 
@@ -1551,8 +1134,6 @@
                 userData.bio = bio;
                 saveUserData();
                 updateUI();
-                
-                // نمایش پیام موفقیت
                 alert('اطلاعات پروفایل با موفقیت ذخیره شد!');
             } else {
                 alert('لطفاً نام خود را وارد کنید.');
@@ -1569,7 +1150,6 @@
                     <div class="card" style="text-align: center;">
                         <i class="fas fa-trophy" style="font-size: 2rem; margin-bottom: 1rem; color: var(--gray-light);"></i>
                         <p>هنوز هیچ چالشی اضافه نکرده‌اید.</p>
-                        <p>برای شروع، دکمه (+) را فشار دهید.</p>
                     </div>
                 `;
                 return;
@@ -1579,26 +1159,30 @@
                 const challengeElement = document.createElement('div');
                 challengeElement.className = 'challenge-card';
                 
-                // محاسبه پیشرفت
                 const now = new Date();
                 const startDate = new Date(challenge.startDate);
                 const endDate = new Date(challenge.endDate);
                 const totalDays = Math.ceil((endDate - startDate) / (1000 * 3600 * 24));
                 const passedDays = Math.ceil((now - startDate) / (1000 * 3600 * 24));
                 let progress = Math.min(100, Math.max(0, Math.floor((passedDays / totalDays) * 100)));
-                
                 if (now > endDate) progress = 100;
                 
                 challengeElement.innerHTML = `
+                    <div class="challenge-actions">
+                        <div class="challenge-action" onclick="editChallenge(${index})">
+                            <i class="fas fa-edit"></i>
+                        </div>
+                        <div class="challenge-action" onclick="deleteChallenge(${index})">
+                            <i class="fas fa-trash"></i>
+                        </div>
+                    </div>
                     <div class="challenge-icon">
                         <i class="fas fa-bullseye"></i>
                     </div>
                     <div class="challenge-content">
                         <h3 class="challenge-title">${challenge.title}</h3>
                         <p class="challenge-desc">${challenge.description}</p>
-                        <p class="challenge-date">
-                            ${formatDate(startDate)} - ${formatDate(endDate)}
-                        </p>
+                        <p class="challenge-date">${formatDate(startDate)} - ${formatDate(endDate)}</p>
                         <div class="progress-bar">
                             <div class="progress-fill" style="width: ${progress}%"></div>
                         </div>
@@ -1625,7 +1209,7 @@
             if (dateType === 'now') {
                 startDate = new Date();
                 endDate = new Date();
-                endDate.setDate(endDate.getDate() + 7); // چالش 7 روزه پیش‌فرض
+                endDate.setDate(endDate.getDate() + 7);
             } else {
                 startDate = new Date(document.getElementById('start-date').value);
                 endDate = new Date(document.getElementById('end-date').value);
@@ -1641,21 +1225,25 @@
                 title: title,
                 description: description,
                 startDate: startDate.toISOString(),
-                endDate: endDate.toISOString(),
-                completed: false
+                endDate: endDate.toISOString()
             };
             
             userData.challenges.push(newChallenge);
             saveUserData();
             renderChallenges();
             closeModal('challenge-modal');
-            
-            // ریست کردن فرم
             document.getElementById('challenge-title').value = '';
             document.getElementById('challenge-desc').value = '';
-            
-            // نمایش پیام موفقیت
             alert('چالش جدید با موفقیت اضافه شد!');
+        }
+
+        // حذف چالش
+        function deleteChallenge(index) {
+            if (confirm('آیا مطمئن هستید که می‌خواهید این چالش را حذف کنید؟')) {
+                userData.challenges.splice(index, 1);
+                saveUserData();
+                renderChallenges();
+            }
         }
 
         // نمایش پست‌های جامعه
@@ -1668,20 +1256,23 @@
                     <div class="card" style="text-align: center;">
                         <i class="fas fa-users" style="font-size: 2rem; margin-bottom: 1rem; color: var(--gray-light);"></i>
                         <p>هنوز هیچ پستی در جامعه وجود ندارد.</p>
-                        <p>اولین نفری باشید که تجربه خود را به اشتراک می‌گذارد!</p>
                     </div>
                 `;
                 return;
             }
             
-            // مرتب کردن پست‌ها بر اساس تاریخ (نزولی)
             const sortedPosts = [...userData.posts].sort((a, b) => new Date(b.date) - new Date(a.date));
             
-            sortedPosts.forEach(post => {
+            sortedPosts.forEach((post, index) => {
                 const postElement = document.createElement('div');
                 postElement.className = 'community-card';
                 
                 postElement.innerHTML = `
+                    <div class="post-actions">
+                        <div class="post-action" onclick="deletePost(${index})">
+                            <i class="fas fa-trash"></i>
+                        </div>
+                    </div>
                     <div class="community-header">
                         <div class="community-avatar">
                             <i class="fas fa-user"></i>
@@ -1692,9 +1283,7 @@
                             <div class="community-time">${formatDate(new Date(post.date), true)}</div>
                         </div>
                     </div>
-                    <div class="community-content">
-                        ${post.content}
-                    </div>
+                    <div class="community-content">${post.content}</div>
                     <div class="community-actions">
                         <div class="community-action ${post.userReaction === 'like' ? 'active' : ''}" onclick="reactToPost(${post.id}, 'like')">
                             <i class="fas fa-thumbs-up"></i>
@@ -1711,35 +1300,29 @@
             });
         }
 
-        // واکنش به پست
-        function reactToPost(postId, reaction) {
-            const post = userData.posts.find(p => p.id === postId);
-            if (!post) return;
-            
-            // اگر کاربر قبلاً واکنش نشان داده، آن را حذف کن
-            if (post.userReaction) {
-                if (post.userReaction === 'like') {
-                    post.likes = Math.max(0, (post.likes || 0) - 1);
-                } else {
-                    post.dislikes = Math.max(0, (post.dislikes || 0) - 1);
-                }
+        // حذف پست
+        function deletePost(index) {
+            if (confirm('آیا مطمئن هستید که می‌خواهید این پست را حذف کنید؟')) {
+                userData.posts.splice(index, 1);
+                saveUserData();
+                renderCommunityPosts();
             }
+        }
+
+        // باز کردن مودال پست
+        function openPostModal() {
+            const today = new Date().toDateString();
+            const lastPostDate = userData.lastPostDate ? userData.lastPostDate.toDateString() : null;
             
-            // اگر واکنش جدید با قبلی متفاوت است، آن را اضافه کن
-            if (!post.userReaction || post.userReaction !== reaction) {
-                post.userReaction = reaction;
-                if (reaction === 'like') {
-                    post.likes = (post.likes || 0) + 1;
-                } else {
-                    post.dislikes = (post.dislikes || 0) + 1;
-                }
+            if (lastPostDate === today) {
+                document.getElementById('post-limit-message').style.display = 'block';
+                document.getElementById('save-post-btn').disabled = true;
             } else {
-                // اگر واکنش تکراری است، آن را حذف کن
-                post.userReaction = null;
+                document.getElementById('post-limit-message').style.display = 'none';
+                document.getElementById('save-post-btn').disabled = false;
             }
             
-            saveUserData();
-            renderCommunityPosts();
+            openModal('post-modal');
         }
 
         // ذخیره پست جدید
@@ -1751,7 +1334,6 @@
                 return;
             }
             
-            // بررسی آیا کاربر امروز پست ارسال کرده
             const today = new Date().toDateString();
             const lastPostDate = userData.lastPostDate ? userData.lastPostDate.toDateString() : null;
             
@@ -1774,21 +1356,16 @@
             saveUserData();
             renderCommunityPosts();
             closeModal('post-modal');
-            
-            // ریست کردن فرم
             document.getElementById('post-content').value = '';
             document.getElementById('post-char-count').textContent = '0';
-            
-            // نمایش پیام موفقیت
             alert('پست شما با موفقیت ارسال شد!');
         }
 
-        // مدیریت آپلود عکس پروفایل
+        // مدیریت آپلود عکس
         function handleAvatarUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
             
-            // بررسی حجم فایل
             if (file.size > 2 * 1024 * 1024) {
                 alert('حجم فایل باید کمتر از 2MB باشد.');
                 return;
@@ -1802,7 +1379,6 @@
             reader.readAsDataURL(file);
         }
 
-        // ذخیره عکس پروفایل
         function saveAvatar() {
             saveUserData();
             closeModal('avatar-modal');
@@ -1811,97 +1387,75 @@
 
         // نمایش تحلیل‌ها
         function renderAnalytics() {
-            // به روزرسانی آمار کلی
-            document.getElementById('analytics-current').textContent = userData.streak;
-            document.getElementById('analytics-success').textContent = calculateSuccessRate() + '%';
+            document.getElementById('analytics-current').textContent = calculateAverageStreak();
+            document.getElementById('analytics-best').textContent = userData.bestStreak;
+            document.getElementById('analytics-worst').textContent = userData.worstStreak;
             document.getElementById('analytics-challenges').textContent = userData.challenges.length;
             
-            // وضعیت خلقی امروز
-            const today = new Date().toDateString();
-            const todayMood = userData.mood[today] || 3;
-            document.getElementById('analytics-mood').textContent = getMoodEmoji(todayMood);
-            
-            // نمودار پیشرفت
             renderProgressChart();
-            
-            // آمار خلق و خو
-            renderMoodStats();
         }
 
-        // محاسبه نرخ موفقیت
-        function calculateSuccessRate() {
+        // محاسبه میانگین پاکی روزانه
+        function calculateAverageStreak() {
             if (!userData.startTime) return 0;
-            
             const now = new Date();
             const startTime = userData.startTime;
             const timeDiff = now.getTime() - startTime.getTime();
             const daysTotal = Math.ceil(timeDiff / (1000 * 3600 * 24));
-            
-            if (daysTotal <= 0) return 100;
-            
-            // روزهایی که کاربر وضعیت خلقی خوب یا عالی داشته
-            let goodDays = 0;
-            for (const date in userData.mood) {
-                if (userData.mood[date] >= 4) {
-                    goodDays++;
-                }
-            }
-            
-            return Math.min(100, Math.round((goodDays / daysTotal) * 100));
+            return daysTotal > 0 ? Math.round(userData.streak / daysTotal * 100) : 0;
         }
 
         // نمایش نمودار پیشرفت
         function renderProgressChart() {
-            const chartContainer = document.getElementById('progress-chart');
-            chartContainer.innerHTML = '';
+            const ctx = document.getElementById('progress-chart').getContext('2d');
             
-            // داده‌های نمونه برای نمایش
-            const weekDays = ['شنبه', 'یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه'];
-            const sampleData = [30, 45, 60, 75, 90, 85, 95];
+            // داده‌های نمونه برای نمودار نقطه‌ای
+            const data = {
+                datasets: [{
+                    label: 'پیشرفت پاکی',
+                    data: [
+                        {x: 1, y: 20},
+                        {x: 2, y: 45},
+                        {x: 3, y: 30},
+                        {x: 4, y: 60},
+                        {x: 5, y: 75},
+                        {x: 6, y: 90},
+                        {x: 7, y: 85}
+                    ],
+                    backgroundColor: 'rgba(0, 102, 255, 0.5)',
+                    borderColor: 'rgba(0, 102, 255, 1)',
+                    borderWidth: 2,
+                    pointRadius: 6,
+                    pointBackgroundColor: 'rgba(0, 102, 255, 1)'
+                }]
+            };
             
-            weekDays.forEach((day, index) => {
-                const bar = document.createElement('div');
-                bar.className = 'bar';
-                bar.style.height = `${sampleData[index]}%`;
-                
-                bar.innerHTML = `
-                    <div class="bar-value">${sampleData[index]}%</div>
-                    <div class="bar-label">${day}</div>
-                `;
-                
-                chartContainer.appendChild(bar);
-            });
-        }
-
-        // نمایش آمار خلق و خو
-        function renderMoodStats() {
-            // جمع‌آوری آمار
-            const moodCounts = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
-            let total = 0;
+            const config = {
+                type: 'scatter',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'درصد موفقیت'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'تعداد دفعات سعی'
+                            }
+                        }
+                    }
+                }
+            };
             
-            for (const date in userData.mood) {
-                const moodValue = userData.mood[date];
-                moodCounts[moodValue]++;
-                total++;
-            }
-            
-            // محاسبه درصدها
-            for (let i = 1; i <= 5; i++) {
-                const percent = total > 0 ? Math.round((moodCounts[i] / total) * 100) : 0;
-                document.getElementById(`mood-${i}`).textContent = `${percent}%`;
-            }
-        }
-
-        // دریافت ایموجی وضعیت خلقی
-        function getMoodEmoji(value) {
-            switch(value) {
-                case 1: return "😢";
-                case 2: return "😞";
-                case 3: return "😐";
-                case 4: return "😊";
-                case 5: return "😁";
-                default: return "😐";
-            }
+            new Chart(ctx, config);
         }
 
         // مدیریت مودال‌ها
@@ -1913,22 +1467,12 @@
             document.getElementById(modalId).classList.remove('active');
         }
 
-        // مدیریت پویای صفحه‌ها
+        // مدیریت صفحه‌ها
         function showPage(pageId) {
-            // مخفی کردن تمام صفحه‌ها
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.remove('active');
-            });
-            
-            // نمایش صفحه مورد نظر
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
             
-            // به روزرسانی نویگیشن
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            
-            // یافتن آیتم نویگیشن مربوطه و فعال کردن آن
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             const navItems = document.querySelectorAll('.nav-item');
             for (let item of navItems) {
                 if (item.onclick.toString().includes(pageId)) {
@@ -1937,28 +1481,19 @@
                 }
             }
             
-            // اگر صفحه تحلیل‌ها است، آن را به روزرسانی کن
-            if (pageId === 'analytics-page') {
-                renderAnalytics();
-            }
+            if (pageId === 'analytics-page') renderAnalytics();
         }
 
-        // فرمت تاریخ برای نمایش
+        // فرمت تاریخ
         function formatDate(date, showTime = false) {
             if (!date) return '';
-            
             const persianDate = new Date(date).toLocaleDateString('fa-IR');
             if (!showTime) return persianDate;
-            
-            const time = new Date(date).toLocaleTimeString('fa-IR', {
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-            
+            const time = new Date(date).toLocaleTimeString('fa-IR', {hour: '2-digit', minute: '2-digit'});
             return `${persianDate} - ${time}`;
         }
 
-        // بستن مودال با کلید ESC
+        // بستن مودال با ESC
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
                 document.querySelectorAll('.modal-overlay').forEach(modal => {
