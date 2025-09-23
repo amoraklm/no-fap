@@ -1405,58 +1405,228 @@
             return daysTotal > 0 ? Math.round(userData.streak / daysTotal * 100) : 0;
         }
 
-        // نمایش نمودار پیشرفت
-        function renderProgressChart() {
-            const ctx = document.getElementById('progress-chart').getContext('2d');
+
+
+
+
+// نمایش تحلیل‌ها
+function renderAnalytics() {
+    document.getElementById('analytics-current').textContent = calculateAverageStreak();
+    document.getElementById('analytics-best').textContent = userData.bestStreak;
+    document.getElementById('analytics-worst').textContent = userData.worstStreak;
+    document.getElementById('analytics-challenges').textContent = userData.challenges.length;
+    
+    renderProgressChart();
+}
+
+// محاسبه میانگین پاکی روزانه
+function calculateAverageStreak() {
+    if (!userData.startTime || userData.streaksHistory.length === 0) return 0;
+    
+    const totalDays = userData.streaksHistory.reduce((sum, streak) => sum + streak.days, 0);
+    return Math.round(totalDays / userData.streaksHistory.length);
+}
+
+// ذخیره تاریخچه استرک‌ها هنگام ریست
+function resetStreak() {
+    if (confirm('آیا مطمئن هستید که می‌خواهید استرک خود را ریست کنید؟')) {
+        // ذخیره استرک فعلی در تاریخچه
+        if (userData.streak > 0) {
+            userData.streaksHistory.push({
+                days: userData.streak,
+                date: new Date().toISOString()
+            });
             
-            // داده‌های نمونه برای نمودار نقطه‌ای
-            const data = {
-                datasets: [{
-                    label: 'پیشرفت پاکی',
-                    data: [
-                        {x: 1, y: 20},
-                        {x: 2, y: 45},
-                        {x: 3, y: 30},
-                        {x: 4, y: 60},
-                        {x: 5, y: 75},
-                        {x: 6, y: 90},
-                        {x: 7, y: 85}
-                    ],
-                    backgroundColor: 'rgba(0, 102, 255, 0.5)',
-                    borderColor: 'rgba(0, 102, 255, 1)',
-                    borderWidth: 2,
-                    pointRadius: 6,
-                    pointBackgroundColor: 'rgba(0, 102, 255, 1)'
-                }]
-            };
-            
-            const config = {
-                type: 'scatter',
-                data: data,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            max: 100,
-                            title: {
-                                display: true,
-                                text: 'درصد موفقیت'
-                            }
-                        },
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'تعداد دفعات سعی'
-                            }
+            // نگه داشتن فقط ۷ سعی اخیر
+            if (userData.streaksHistory.length > 7) {
+                userData.streaksHistory = userData.streaksHistory.slice(-7);
+            }
+        }
+        
+        userData.startTime = new Date();
+        saveUserData();
+        updateUI();
+        alert('استرک شما با موفقیت ریست شد!');
+    }
+}
+
+// نمایش نمودار پیشرفت حرفه‌ای
+function renderProgressChart() {
+    const ctx = document.getElementById('progress-chart').getContext('2d');
+    
+    // اگر نمودار قبلی وجود دارد، آن را از بین ببریم
+    if (window.progressChart) {
+        window.progressChart.destroy();
+    }
+    
+    // داده‌های داینامیک از تاریخچه کاربر
+    const streaks = userData.streaksHistory;
+    
+    // اگر تاریخچه خالی است، داده‌های نمونه نمایش دهیم
+    let chartData = [];
+    let maxDays = 10; // مقدار پیش‌فرض
+    
+    if (streaks.length > 0) {
+        // محاسبه بیشترین روز برای تنظیم محور عمودی
+        maxDays = Math.max(...streaks.map(s => s.days));
+        // گرد کردن به بالا به مضرب ۵
+        maxDays = Math.ceil(maxDays / 5) * 5;
+        if (maxDays < 10) maxDays = 10;
+        
+        // ایجاد داده‌های نمودار از ۷ سعی اخیر
+        const recentStreaks = streaks.slice(-7);
+        chartData = recentStreaks.map((streak, index) => ({
+            x: index + 1,
+            y: streak.days
+        }));
+    } else {
+        // داده‌های نمونه برای زمانی که تاریخچه وجود ندارد
+        chartData = [
+            {x: 1, y: 3},
+            {x: 2, y: 5},
+            {x: 3, y: 2},
+            {x: 4, y: 7},
+            {x: 5, y: 4},
+            {x: 6, y: 6},
+            {x: 7, y: 8}
+        ];
+        maxDays = 10;
+    }
+    
+    const data = {
+        datasets: [{
+            label: 'تعداد روزهای پاک',
+            data: chartData,
+            backgroundColor: 'rgba(0, 102, 255, 0.1)',
+            borderColor: 'rgba(0, 102, 255, 1)',
+            borderWidth: 3,
+            pointRadius: 6,
+            pointBackgroundColor: 'rgba(0, 102, 255, 1)',
+            pointBorderColor: '#ffffff',
+            pointBorderWidth: 2,
+            pointHoverRadius: 8,
+            fill: true,
+            tension: 0.4 // ایجاد انحناء طبیعی در خط
+        }]
+    };
+    
+    const config = {
+        type: 'line',
+        data: data,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        color: '#f8f9fa',
+                        font: {
+                            family: 'Vazirmatn',
+                            size: 12
+                        }
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    titleColor: '#f8f9fa',
+                    bodyColor: '#f8f9fa',
+                    borderColor: '#0066ff',
+                    borderWidth: 1,
+                    cornerRadius: 8,
+                    displayColors: false,
+                    callbacks: {
+                        label: function(context) {
+                            return `سعی ${context.parsed.x}: ${context.parsed.y} روز پاک`;
                         }
                     }
                 }
-            };
-            
-            new Chart(ctx, config);
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: maxDays,
+                    title: {
+                        display: true,
+                        text: 'تعداد روزهای پاک',
+                        color: '#f8f9fa',
+                        font: {
+                            family: 'Vazirmatn',
+                            size: 12,
+                            weight: 'bold'
+                        }
+                    },
+                    ticks: {
+                        color: '#f8f9fa',
+                        stepSize: Math.ceil(maxDays / 5)
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'دفعات سعی (۷ سعی اخیر)',
+                        color: '#f8f9fa',
+                        font: {
+                            family: 'Vazirmatn',
+                            size: 12,
+                            weight: 'bold'
+                        }
+                    },
+                    ticks: {
+                        color: '#f8f9fa',
+                        callback: function(value) {
+                            return `سعی ${value}`;
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    }
+                }
+            },
+            interaction: {
+                intersect: false,
+                mode: 'index'
+            },
+            elements: {
+                line: {
+                    tension: 0.4
+                }
+            }
         }
+    };
+    
+    window.progressChart = new Chart(ctx, config);
+}
+
+// همچنین باید در تابع loadUserData مقدار اولیه برای streaksHistory اضافه کنیم:
+function loadUserData() {
+    const savedData = localStorage.getItem('nofapUserData');
+    if (savedData) {
+        userData = JSON.parse(savedData);
+        if (userData.startTime) userData.startTime = new Date(userData.startTime);
+        if (userData.lastPostDate) userData.lastPostDate = new Date(userData.lastPostDate);
+        
+        // اطمینان از وجود آرایه streaksHistory
+        if (!userData.streaksHistory) {
+            userData.streaksHistory = [];
+        }
+    } else {
+        userData.startTime = new Date();
+        userData.streaksHistory = []; // مقدار اولیه
+        saveUserData();
+    }
+}
+
+
+
+
+
+
+
 
         // مدیریت مودال‌ها
         function openModal(modalId) {
